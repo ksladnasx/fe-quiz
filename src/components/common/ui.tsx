@@ -1,5 +1,13 @@
+import {
+  BookMarked,
+  CircleCheck,
+  CircleQuestionMark,
+  CircleX,
+  Inbox,
+} from 'lucide-react'
 import { DIFFICULTY_LABEL, QUESTION_TYPE_LABEL, type Question } from '../../types'
 import { categoryMap } from '../../data'
+import { getCategoryIcon } from './icons'
 
 export function TypeBadge({ type }: { type: Question['type'] }) {
   return <span className="tag tag-type">{QUESTION_TYPE_LABEL[type]}</span>
@@ -11,28 +19,30 @@ export function DifficultyBadge({ difficulty }: { difficulty: Question['difficul
 
 export function CategoryTag({ category, sub }: { category: string; sub?: string }) {
   const cat = categoryMap[category]
+  const Icon = getCategoryIcon(category)
   return (
     <span className="tag tag-cat">
-      {cat ? `${cat.icon} ${cat.name}` : category}
+      <Icon size={12} />
+      {cat?.name ?? category}
       {sub ? ` · ${sub}` : ''}
     </span>
   )
 }
 
 export function EmptyState({
-  icon = '📭',
+  icon,
   title,
   desc,
   action,
 }: {
-  icon?: string
+  icon?: React.ReactNode
   title: string
   desc?: string
   action?: React.ReactNode
 }) {
   return (
     <div className="empty-state">
-      <div className="empty-icon">{icon}</div>
+      <div className="empty-icon">{icon ?? <Inbox size={40} strokeWidth={1.5} />}</div>
       <div className="empty-title">{title}</div>
       {desc && <div style={{ fontSize: 13 }}>{desc}</div>}
       {action && <div style={{ marginTop: 16 }}>{action}</div>}
@@ -51,8 +61,25 @@ export function ProgressBar({ value, max }: { value: number; max: number }) {
 
 /** 答案状态的文案 + 颜色 */
 export function StatusText({ grading }: { grading: 'correct' | 'wrong' | 'pending' | 'none' }) {
-  if (grading === 'correct') return <span className="status-correct">✓ 已答对</span>
-  if (grading === 'wrong') return <span className="status-wrong">✗ 已答错</span>
-  if (grading === 'pending') return <span className="status-pending">● 待自评</span>
+  if (grading === 'correct')
+    return (
+      <span className="status-correct status-inline">
+        <CircleCheck size={13} /> 已答对
+      </span>
+    )
+  if (grading === 'wrong')
+    return (
+      <span className="status-wrong status-inline">
+        <CircleX size={13} /> 已答错
+      </span>
+    )
+  if (grading === 'pending')
+    return (
+      <span className="status-pending status-inline">
+        <CircleQuestionMark size={13} /> 待自评
+      </span>
+    )
   return <span>未做过</span>
 }
+
+export { BookMarked as AnalysisBookIcon }

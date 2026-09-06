@@ -1,6 +1,19 @@
 import { useEffect, useMemo, useState } from 'react'
+import {
+  BookMarked,
+  CircleCheck,
+  CircleQuestionMark,
+  CircleX,
+  FileText,
+  Lightbulb,
+  RotateCcw,
+  Star,
+  ThumbsDown,
+  ThumbsUp,
+} from 'lucide-react'
 import type { GradingStatus, Question } from '../../types'
 import { categoryMap } from '../../data'
+import { CategoryIcon } from '../common/icons'
 import { gradeAnswer, normalizeAnswer } from '../../utils'
 import { Markdown } from './Markdown'
 import { DifficultyBadge, TypeBadge } from '../common/ui'
@@ -109,7 +122,8 @@ export function QuestionCard({
         <TypeBadge type={question.type} />
         <DifficultyBadge difficulty={question.difficulty} />
         <span className="tag tag-cat">
-          {cat?.icon} {cat?.name}
+          <CategoryIcon category={question.category} size={12} />
+          {cat?.name}
           {question.subCategory ? ` · ${question.subCategory}` : ''}
         </span>
         <button
@@ -118,7 +132,7 @@ export function QuestionCard({
           title={isFav ? '取消收藏' : '收藏本题'}
           onClick={() => toggleFavorite(question.id)}
         >
-          {isFav ? '★' : '☆'}
+          <Star size={17} fill={isFav ? 'currentColor' : 'none'} />
         </button>
       </div>
 
@@ -238,14 +252,28 @@ export function QuestionCard({
       {submitted && grading && (
         <div className="analysis-panel">
           <div className="answer-actions" style={{ marginTop: 0, marginBottom: 14 }}>
-            {grading === 'correct' && <span className="verdict verdict-correct">✓ 回答正确</span>}
-            {grading === 'wrong' && <span className="verdict verdict-wrong">✗ 回答错误</span>}
+            {grading === 'correct' && (
+              <span className="verdict verdict-correct">
+                <CircleCheck size={15} />
+                回答正确
+              </span>
+            )}
+            {grading === 'wrong' && (
+              <span className="verdict verdict-wrong">
+                <CircleX size={15} />
+                回答错误
+              </span>
+            )}
             {grading === 'pending' && (
-              <span className="verdict verdict-pending">已提交 · 请对照参考答案自评</span>
+              <span className="verdict verdict-pending">
+                <CircleQuestionMark size={15} />
+                已提交 · 请对照参考答案自评
+              </span>
             )}
             {mode === 'practice' && (
               <button type="button" className="btn btn-sm btn-ghost" onClick={handleReset}>
-                ↻ 重新答题
+                <RotateCcw size={13} />
+                重新答题
               </button>
             )}
           </div>
@@ -255,14 +283,16 @@ export function QuestionCard({
             <div className="answer-actions" style={{ marginBottom: 14 }}>
               <span style={{ fontSize: 13, color: 'var(--text-2)' }}>自评结果：</span>
               <button type="button" className="btn btn-sm" onClick={() => handleSelfAssess(true)}>
-                👍 我答出来了
+                <ThumbsUp size={13} />
+                我答出来了
               </button>
               <button
                 type="button"
                 className="btn btn-sm btn-danger"
                 onClick={() => handleSelfAssess(false)}
               >
-                👎 没答好，需要复习
+                <ThumbsDown size={13} />
+                没答好，需要复习
               </button>
             </div>
           )}
@@ -288,7 +318,10 @@ export function QuestionCard({
 
           {question.answer && (question.type === 'essay' || question.type === 'code') && (
             <>
-              <p className="analysis-title">📖 参考答案</p>
+              <p className="analysis-title">
+                <BookMarked size={14} />
+                参考答案
+              </p>
               <Markdown content={String(question.answer)} />
             </>
           )}
@@ -296,7 +329,8 @@ export function QuestionCard({
           {question.analysis && (
             <>
               <p className="analysis-title" style={{ marginTop: 16 }}>
-                💡 解析
+                <Lightbulb size={14} />
+                解析
               </p>
               <Markdown content={question.analysis} />
             </>
@@ -313,8 +347,9 @@ export function QuestionCard({
           )}
 
           {question.source && (
-            <div style={{ marginTop: 12, fontSize: 11.5, color: 'var(--text-3)' }}>
-              📄 来源：docs/{question.source}
+            <div className="source-line">
+              <FileText size={12} />
+              来源：docs/{question.source}
             </div>
           )}
         </div>

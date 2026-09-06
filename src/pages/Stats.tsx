@@ -1,7 +1,18 @@
 import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
+import {
+  ChartColumn,
+  ChartNoAxesCombined,
+  CircleCheck,
+  CircleX,
+  Clock,
+  Flame,
+  Target,
+  TrendingUp,
+} from 'lucide-react'
 import { categories, questionMap, questions, questionsByCategory } from '../data'
 import { useStudyStore } from '../store/useStudyStore'
+import { CategoryIcon } from '../components/common/icons'
 import { percent, formatDate } from '../utils'
 import { EmptyState } from '../components/common/ui'
 
@@ -104,7 +115,7 @@ export function Stats() {
       <main className="page page-narrow">
         <div className="card">
           <EmptyState
-            icon="📊"
+            icon={<ChartColumn size={40} strokeWidth={1.5} />}
             title="还没有学习数据"
             desc="做完几道题后，这里会展示正确率、分类掌握度与最近趋势"
             action={
@@ -121,7 +132,10 @@ export function Stats() {
   return (
     <main className="page">
       <div className="page-header">
-        <h1 className="page-title">📊 学习统计</h1>
+        <h1 className="page-title">
+          <ChartColumn size={20} />
+          学习统计
+        </h1>
         <p className="page-desc">数据基于本地作答记录实时计算 · 刷新不丢失</p>
       </div>
 
@@ -172,7 +186,10 @@ export function Stats() {
 
       {weakCats.length > 0 && (
         <div className="card" style={{ padding: '16px 20px', marginBottom: 18, background: 'var(--warning-soft)', border: '1px solid rgba(217,119,6,.25)' }}>
-          <strong style={{ fontSize: 13.5 }}>🎯 建议复习：</strong>
+          <strong style={{ fontSize: 13.5, display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+            <Target size={15} />
+            建议复习：
+          </strong>
           <span style={{ fontSize: 13, color: 'var(--text-2)' }}>
             {weakCats.map((c) => `${c.cat.name}（正确率 ${c.accuracy}%）`).join('、')}
             {' '}—— 建议重做这些分类的错题并回看解析。
@@ -182,12 +199,15 @@ export function Stats() {
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: 16, marginBottom: 18 }}>
         <section className="card" style={{ padding: '18px 20px' }}>
-          <h2 className="section-title">📈 各分类掌握度（正确率）</h2>
+          <h2 className="section-title">
+            <TrendingUp size={16} />
+            各分类掌握度（正确率）
+          </h2>
           {catStats.length === 0 && <p style={{ color: 'var(--text-3)' }}>暂无数据</p>}
           {catStats.map((c) => (
             <div className="bar-row" key={c.cat.id}>
               <div className="bar-name">
-                <span>{c.cat.icon}</span>
+                <CategoryIcon category={c.cat.id} size={13} />
                 <span>{c.cat.name}</span>
               </div>
               <div className="bar-track">
@@ -212,7 +232,10 @@ export function Stats() {
         </section>
 
         <section className="card" style={{ padding: '18px 20px' }}>
-          <h2 className="section-title">🔥 最近 7 天做题量</h2>
+          <h2 className="section-title">
+            <Flame size={16} />
+            最近 7 天做题量
+          </h2>
           <div className="week-chart">
             {weekly.map((d) => (
               <div className="week-col" key={d.label} title={`${d.label}：${d.total} 题，答对 ${d.correct}`}>
@@ -240,7 +263,10 @@ export function Stats() {
             </span>
           </div>
 
-          <h2 className="section-title" style={{ marginTop: 20 }}>🧩 各题型完成情况</h2>
+          <h2 className="section-title" style={{ marginTop: 20 }}>
+            <ChartNoAxesCombined size={16} />
+            各题型完成情况
+          </h2>
           {Object.entries(typeStats).map(([type, s]) => (
             <div className="bar-row" key={type} style={{ gridTemplateColumns: '64px minmax(0,1fr) 90px' }}>
               <div className="bar-name">{type}</div>
@@ -254,14 +280,21 @@ export function Stats() {
       </div>
 
       <section className="card" style={{ padding: '18px 20px' }}>
-        <h2 className="section-title">🕘 最近做题记录</h2>
+        <h2 className="section-title">
+          <Clock size={16} />
+          最近做题记录
+        </h2>
         {history.slice(0, 12).map((h, i) => {
           const q = questionMap[h.questionId]
           return (
             <div className="recent-item" key={`${h.questionId}-${h.time}-${i}`}>
-              <span
-                className={`dot dot-${h.grading === 'correct' ? 'correct' : h.grading === 'wrong' ? 'wrong' : 'pending'}`}
-              />
+              {h.grading === 'correct' ? (
+                <CircleCheck size={14} className="dot-icon dot-correct" />
+              ) : h.grading === 'wrong' ? (
+                <CircleX size={14} className="dot-icon dot-wrong" />
+              ) : (
+                <CircleCheck size={14} className="dot-icon dot-pending" />
+              )}
               <span style={{ flex: 1, overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
                 {q ? q.question.replace(/[#*`>|]/g, '').replace(/[[\]]/g, '').slice(0, 60) : h.questionId}
               </span>

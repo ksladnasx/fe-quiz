@@ -1,16 +1,25 @@
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import { useMemo, useState } from 'react'
+import {
+  BookOpen,
+  BookX,
+  ChartColumn,
+  House,
+  Mic,
+  Star,
+  type LucideIcon,
+} from 'lucide-react'
 import { useStudyStore } from '../../store/useStudyStore'
 import { questions } from '../../data'
 import { percent } from '../../utils'
 
-const NAV_ITEMS = [
-  { to: '/', icon: '🏠', label: '首页' },
-  { to: '/bank', icon: '📚', label: '题库' },
-  { to: '/wrong', icon: '📕', label: '错题本', wrongBadge: true },
-  { to: '/favorites', icon: '⭐', label: '收藏' },
-  { to: '/stats', icon: '📊', label: '统计' },
-  { to: '/interview', icon: '🎤', label: '面试模式' },
+const NAV_ITEMS: { to: string; icon: LucideIcon; label: string; wrongBadge?: boolean }[] = [
+  { to: '/', icon: House, label: '首页' },
+  { to: '/bank', icon: BookOpen, label: '题库' },
+  { to: '/wrong', icon: BookX, label: '错题本', wrongBadge: true },
+  { to: '/favorites', icon: Star, label: '收藏' },
+  { to: '/stats', icon: ChartColumn, label: '统计' },
+  { to: '/interview', icon: Mic, label: '面试模式' },
 ]
 
 export function AppLayout() {
@@ -44,7 +53,7 @@ export function AppLayout() {
     <div className="app-shell">
       <aside className="sidebar">
         <div className="sidebar-brand">
-          <div className="brand-logo">前</div>
+          <img className="brand-logo brand-logo-img" src="./myblog.png" alt="logo" />
           <div>
             <div className="brand-title">前端面试刷题</div>
             <div className="brand-sub">FE Interview Quiz</div>
@@ -58,7 +67,9 @@ export function AppLayout() {
               end={item.to === '/'}
               className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
             >
-              <span className="nav-icon">{item.icon}</span>
+              <span className="nav-icon">
+                <item.icon size={16} strokeWidth={2} />
+              </span>
               {item.label}
               {item.wrongBadge && wrongCount > 0 && (
                 <span className="nav-badge">{wrongCount}</span>
@@ -89,7 +100,7 @@ export function AppLayout() {
       <div className="main-area">
         {/* 移动端顶栏 */}
         <div className="mobile-topbar">
-          <div className="brand-logo">前</div>
+          <img className="brand-logo brand-logo-img" src="./myblog.png" alt="logo" />
           {NAV_ITEMS.map((item) => (
             <NavLink
               key={item.to}

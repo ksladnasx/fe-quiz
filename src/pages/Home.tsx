@@ -1,8 +1,17 @@
 import { useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import {
+  BookOpen,
+  Clock,
+  Map,
+  RotateCcw,
+  Sparkles,
+  Zap,
+} from 'lucide-react'
 import { categories, questionMap, questions, questionsByCategory, shuffle } from '../data'
 import { useStudyStore } from '../store/useStudyStore'
 import { percent, formatTime } from '../utils'
+import { getCategoryIcon } from '../components/common/icons'
 import { ProgressBar, StatusText } from '../components/common/ui'
 
 export function Home() {
@@ -73,16 +82,23 @@ export function Home() {
         </p>
         <div className="hero-actions">
           <button className="btn btn-lg btn-primary" onClick={() => startQuick('random20')}>
-            ⚡ 快速开始 · 随机 20 题
+            <Zap size={16} />
+            快速开始 · 随机 20 题
           </button>
-          <button className="btn btn-lg" style={{ background: 'rgba(255,255,255,0.12)', borderColor: 'rgba(255,255,255,0.25)', color: '#fff' }} onClick={() => startQuick('undone')}>
-            📖 刷未做的题
+          <button
+            className="btn btn-lg btn-hero"
+            onClick={() => startQuick('undone')}
+          >
+            <BookOpen size={16} />
+            刷未做的题
           </button>
-          <button className="btn btn-lg" style={{ background: 'rgba(255,255,255,0.12)', borderColor: 'rgba(255,255,255,0.25)', color: '#fff' }} onClick={() => startQuick('wrong')}>
-            📕 错题重做
+          <button className="btn btn-lg btn-hero" onClick={() => startQuick('wrong')}>
+            <RotateCcw size={16} />
+            错题重做
           </button>
-          <Link to="/interview" className="btn btn-lg" style={{ background: 'rgba(255,255,255,0.12)', borderColor: 'rgba(255,255,255,0.25)', color: '#fff' }}>
-            🎤 模拟面试
+          <Link to="/interview" className="btn btn-lg btn-hero">
+            <Sparkles size={16} />
+            模拟面试
           </Link>
         </div>
         <div className="hero-stats">
@@ -105,31 +121,38 @@ export function Home() {
         </div>
       </section>
 
-      <h2 className="section-title">📚 知识分类</h2>
+      <h2 className="section-title">
+        <BookOpen size={16} />
+        知识分类
+      </h2>
       <div className="grid-cats">
-        {catStats.map(({ cat, total, done, accuracy }) => (
-          <Link key={cat.id} to={`/bank?cat=${cat.id}`} className="card cat-card">
-            <div className="cat-card-head">
-              <div className="cat-icon" style={{ background: `${cat.color}1a`, color: cat.color }}>
-                {cat.icon}
-              </div>
-              <div style={{ flex: 1 }}>
-                <div className="cat-name">{cat.name}</div>
-                <div style={{ fontSize: 11.5, color: 'var(--text-3)' }}>
-                  {done}/{total} 已完成 · 正确率 {accuracy}%
+        {catStats.map(({ cat, total, done, accuracy }) => {
+          const Icon = getCategoryIcon(cat.id)
+          return (
+            <Link key={cat.id} to={`/bank?cat=${cat.id}`} className="card cat-card">
+              <div className="cat-card-head">
+                <div className="cat-icon" style={{ background: `${cat.color}1a`, color: cat.color }}>
+                  <Icon size={19} strokeWidth={1.8} />
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div className="cat-name">{cat.name}</div>
+                  <div style={{ fontSize: 11.5, color: 'var(--text-3)' }}>
+                    {done}/{total} 已完成 · 正确率 {accuracy}%
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="cat-desc">{cat.description}</div>
-            <ProgressBar value={done} max={total} />
-          </Link>
-        ))}
+              <div className="cat-desc">{cat.description}</div>
+              <ProgressBar value={done} max={total} />
+            </Link>
+          )
+        })}
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 16 }}>
         <section className="card" style={{ padding: '18px 20px' }}>
-          <h2 className="section-title" style={{ marginBottom: 8 }}>
-            🕘 最近做题记录
+          <h2 className="section-title">
+            <Clock size={16} />
+            最近做题记录
           </h2>
           {recent.length === 0 ? (
             <p style={{ color: 'var(--text-3)', fontSize: 13, padding: '16px 0' }}>
@@ -152,8 +175,9 @@ export function Home() {
         </section>
 
         <section className="card" style={{ padding: '18px 20px' }}>
-          <h2 className="section-title" style={{ marginBottom: 8 }}>
-            🎯 复习路线（来自 docs 目录索引）
+          <h2 className="section-title">
+            <Map size={16} />
+            复习路线（来自 docs 目录索引）
           </h2>
           <ol style={{ margin: '10px 0 0', paddingLeft: 20, fontSize: 13, color: 'var(--text-2)', lineHeight: 2 }}>
             <li>
@@ -171,10 +195,11 @@ export function Home() {
           </ol>
           <div style={{ marginTop: 14, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             <Link to="/bank" className="btn btn-sm">
-              进入题库 →
+              <BookOpen size={13} />
+              进入题库
             </Link>
             <Link to="/stats" className="btn btn-sm">
-              查看统计 →
+              查看统计
             </Link>
           </div>
         </section>

@@ -1,5 +1,14 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import {
+  BookX,
+  CircleCheck,
+  Eye,
+  Lightbulb,
+  PartyPopper,
+  RotateCcw,
+  Trash,
+} from 'lucide-react'
 import { questionMap, categories } from '../data'
 import { useStudyStore } from '../store/useStudyStore'
 import { formatTime } from '../utils'
@@ -42,7 +51,10 @@ export function WrongBook() {
   return (
     <main className="page page-narrow">
       <div className="page-header">
-        <h1 className="page-title">📕 错题本</h1>
+        <h1 className="page-title">
+          <BookX size={20} />
+          错题本
+        </h1>
         <p className="page-desc">
           共 {wrongList.length} 道错题 · 答错自动收录，重做答对后自动移出
         </p>
@@ -55,11 +67,12 @@ export function WrongBook() {
             .filter((c) => wrongByCat[c.id])
             .map((c) => (
               <option key={c.id} value={c.id}>
-                {c.icon} {c.name}（{wrongByCat[c.id]}）
+                {c.name}（{wrongByCat[c.id]}）
               </option>
             ))}
         </select>
         <button className="btn btn-primary" disabled={wrongList.length === 0} onClick={redoAll}>
+          <RotateCcw size={14} />
           开始重做（{wrongList.length}）
         </button>
       </div>
@@ -67,7 +80,7 @@ export function WrongBook() {
       {wrongList.length === 0 ? (
         <div className="card">
           <EmptyState
-            icon="🎉"
+            icon={<PartyPopper size={40} strokeWidth={1.5} />}
             title="错题本是空的"
             desc="当前没有待复习的错题，继续保持！"
           />
@@ -110,15 +123,18 @@ export function WrongBook() {
                     className="btn btn-sm btn-primary"
                     onClick={() => navigate('/practice', { state: { ids: [question.id], title: '错题重做' } })}
                   >
+                    <RotateCcw size={13} />
                     重做本题
                   </button>
                   <button
                     className="btn btn-sm"
                     onClick={() => setExpanded(isOpen ? null : question.id)}
                   >
+                    <Eye size={13} />
                     {isOpen ? '收起解析' : '查看解析'}
                   </button>
                   <button className="btn btn-sm btn-danger" onClick={() => dismissWrong(question.id)}>
+                    <Trash size={13} />
                     移出错题本
                   </button>
                 </div>
@@ -126,7 +142,8 @@ export function WrongBook() {
                 {isOpen && (
                   <div style={{ marginTop: 14, borderTop: '1px dashed var(--border-strong)', paddingTop: 12 }}>
                     <p className="analysis-title" style={{ color: 'var(--success)' }}>
-                      ✓ 正确答案 / 参考答案
+                      <CircleCheck size={14} />
+                      正确答案 / 参考答案
                     </p>
                     {question.type === 'judge' ? (
                       <div style={{ fontSize: 13 }}>{question.answer ? '正确 ✓' : '错误 ✗'}</div>
@@ -139,7 +156,10 @@ export function WrongBook() {
                     )}
                     {question.analysis && (
                       <>
-                        <p className="analysis-title" style={{ marginTop: 14 }}>💡 解析</p>
+                        <p className="analysis-title" style={{ marginTop: 14 }}>
+                          <Lightbulb size={14} />
+                          解析
+                        </p>
                         <Markdown content={question.analysis} />
                       </>
                     )}

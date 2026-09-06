@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { ListOrdered, Library, SearchX, Shuffle, Star } from 'lucide-react'
 import {
   categories,
   subCategoriesByCategory,
@@ -39,7 +40,10 @@ export function QuestionBank() {
   return (
     <main className="page">
       <div className="page-header">
-        <h1 className="page-title">📚 题库</h1>
+        <h1 className="page-title">
+          <Library size={20} />
+          题库
+        </h1>
         <p className="page-desc">
           共 {results.length} 道题符合当前条件 · 支持按分类、题型、难度、完成状态筛选与全文搜索
         </p>
@@ -57,7 +61,7 @@ export function QuestionBank() {
           <option value="">全部分类</option>
           {categories.map((c) => (
             <option key={c.id} value={c.id}>
-              {c.icon} {c.name}
+              {c.name}
             </option>
           ))}
         </select>
@@ -122,14 +126,26 @@ export function QuestionBank() {
           onChange={(e) => updateParam('q', e.target.value)}
         />
 
-        <select
-          className="select"
-          value={order}
-          onChange={(e) => setOrder(e.target.value as 'seq' | 'random')}
-        >
-          <option value="seq">顺序刷题</option>
-          <option value="random">随机刷题</option>
-        </select>
+        <div className="order-toggle">
+          <button
+            type="button"
+            className={`btn btn-sm ${order === 'seq' ? 'btn-primary' : ''}`}
+            onClick={() => setOrder('seq')}
+            title="顺序刷题"
+          >
+            <ListOrdered size={14} />
+            顺序
+          </button>
+          <button
+            type="button"
+            className={`btn btn-sm ${order === 'random' ? 'btn-primary' : ''}`}
+            onClick={() => setOrder('random')}
+            title="随机刷题"
+          >
+            <Shuffle size={14} />
+            随机
+          </button>
+        </div>
 
         <button
           className="btn btn-primary"
@@ -148,7 +164,7 @@ export function QuestionBank() {
       {results.length === 0 ? (
         <div className="card">
           <EmptyState
-            icon="🔍"
+            icon={<SearchX size={40} strokeWidth={1.5} />}
             title="没有符合条件的题目"
             desc="调整筛选条件或清空筛选试试"
           />
@@ -168,7 +184,12 @@ export function QuestionBank() {
                   <TypeBadge type={q.type} />
                   <DifficultyBadge difficulty={q.difficulty} />
                   <CategoryTag category={q.category} sub={q.subCategory} />
-                  {favorites[q.id] && <span className="tag" style={{ background: 'var(--warning-soft)', color: 'var(--warning)' }}>★ 已收藏</span>}
+                  {favorites[q.id] && (
+                    <span className="tag" style={{ background: 'var(--warning-soft)', color: 'var(--warning)' }}>
+                      <Star size={11} fill="currentColor" />
+                      已收藏
+                    </span>
+                  )}
                   <div className="q-row-status">
                     <StatusText grading={rec?.grading ?? 'none'} />
                     {rec && rec.attempts > 1 && <span>· 做过 {rec.attempts} 次</span>}

@@ -1,5 +1,15 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, useLocation, useSearchParams } from 'react-router-dom'
+import {
+  ChevronLeft,
+  ChevronRight,
+  Flag,
+  FolderOpen,
+  Keyboard,
+  PartyPopper,
+  RotateCcw,
+  Shuffle,
+} from 'lucide-react'
 import { questionMap, shuffle, categoryMap } from '../data'
 import type { GradingStatus } from '../types'
 import { useStudyStore } from '../store/useStudyStore'
@@ -99,7 +109,7 @@ export function Practice() {
       <main className="page page-narrow">
         <div className="card">
           <EmptyState
-            icon="🗂️"
+            icon={<FolderOpen size={40} strokeWidth={1.5} />}
             title="没有可刷的题目"
             desc="当前筛选条件下没有题目，或传入的题目 id 无效"
             action={
@@ -120,7 +130,9 @@ export function Practice() {
     return (
       <main className="page page-narrow">
         <div className="card" style={{ padding: 36, textAlign: 'center' }}>
-          <div style={{ fontSize: 44, marginBottom: 10 }}>🎉</div>
+          <div className="finish-icon">
+            <PartyPopper size={44} strokeWidth={1.5} />
+          </div>
           <h2 style={{ margin: '0 0 6px' }}>本次练习完成</h2>
           <p style={{ color: 'var(--text-2)', fontSize: 13.5, marginTop: 0 }}>
             {paperTitle} · 共 {paper.length} 题，完成 {graded.length} 题
@@ -151,7 +163,8 @@ export function Practice() {
                 setFinished(false)
               }}
             >
-              ↻ 再刷一轮
+              <RotateCcw size={14} />
+              再刷一轮
             </button>
             <Link className="btn" to="/wrong">
               查看错题本
@@ -172,8 +185,10 @@ export function Practice() {
           <div className="card practice-head">
             <div>
               <div className="practice-head-title">{paperTitle}</div>
-              <div style={{ fontSize: 11.5, color: 'var(--text-3)' }}>
-                {filters.order === 'random' && !stateIds ? '随机顺序' : '顺序练习'} ·{' '}
+              <div className="practice-sub">
+                {filters.order === 'random' && !stateIds && <Shuffle size={11} />}
+                {filters.order === 'random' && !stateIds ? '随机顺序' : '顺序练习'}
+                {' · '}
                 <Link to="/bank" style={{ color: 'inherit' }}>
                   退出练习
                 </Link>
@@ -186,6 +201,7 @@ export function Practice() {
               {index + 1} / {paper.length} · 已答 {answeredCount}
             </div>
             <button className="btn btn-sm" onClick={() => setFinished(true)}>
+              <Flag size={13} />
               结束练习
             </button>
           </div>
@@ -203,17 +219,20 @@ export function Practice() {
 
           <div className="card practice-footer">
             <button className="btn" onClick={goPrev} disabled={index === 0}>
-              ← 上一题
+              <ChevronLeft size={15} />
+              上一题
             </button>
-            <span style={{ fontSize: 12, color: 'var(--text-3)' }}>
-              {current?.id} · 快捷键：←/→ 切题
+            <span className="hotkey-hint">
+              <Keyboard size={12} />
+              {current?.id} · ←/→ 切题
             </span>
             <button
               className="btn btn-primary"
               onClick={goNext}
               disabled={index >= paper.length - 1}
             >
-              下一题 →
+              下一题
+              <ChevronRight size={15} />
             </button>
           </div>
         </div>

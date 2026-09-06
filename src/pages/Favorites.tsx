@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { BookOpen, Star } from 'lucide-react'
 import { questionMap } from '../data'
 import { useStudyStore } from '../store/useStudyStore'
 import { EmptyState, StatusText, TypeBadge, DifficultyBadge, CategoryTag } from '../components/common/ui'
@@ -22,16 +23,19 @@ export function Favorites() {
   return (
     <main className="page page-narrow">
       <div className="page-header">
-        <h1 className="page-title">⭐ 我的收藏</h1>
-        <p className="page-desc">共 {list.length} 道收藏题 · 点击 ★ 可取消收藏</p>
+        <h1 className="page-title">
+          <Star size={20} />
+          我的收藏
+        </h1>
+        <p className="page-desc">共 {list.length} 道收藏题 · 点击星标可取消收藏</p>
       </div>
 
       {list.length === 0 ? (
         <div className="card">
           <EmptyState
-            icon="⭐"
+            icon={<Star size={40} strokeWidth={1.5} />}
             title="还没有收藏题目"
-            desc="刷题时点击题目右上角的 ☆ 即可收藏重点题"
+            desc="刷题时点击题目右上角的星标图标即可收藏重点题"
             action={
               <button className="btn btn-primary" onClick={() => navigate('/bank')}>
                 去题库刷题
@@ -50,6 +54,7 @@ export function Favorites() {
                 })
               }
             >
+              <BookOpen size={14} />
               开始刷收藏题（{list.length}）
             </button>
           </div>
@@ -82,7 +87,7 @@ export function Favorites() {
                       toggleFavorite(question.id)
                     }}
                   >
-                    ★
+                    <Star size={15} fill="currentColor" />
                   </button>
                   <span>{question.question.replace(/[#*`>]/g, '')}</span>
                 </div>

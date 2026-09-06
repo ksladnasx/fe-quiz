@@ -10,7 +10,6 @@ export type GradingStatus = 'correct' | 'wrong' | 'pending'
 export interface Category {
   id: string
   name: string
-  icon: string
   color: string
   description: string
   /** docs 来源文档 */
