@@ -1,11 +1,13 @@
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   BookOpen,
   BookX,
   ChartColumn,
   House,
   Mic,
+  MoonStar,
+  SunMedium,
   Star,
   type LucideIcon,
 } from 'lucide-react'
@@ -22,10 +24,28 @@ const NAV_ITEMS: { to: string; icon: LucideIcon; label: string; wrongBadge?: boo
   { to: '/interview', icon: Mic, label: '面试模式' },
 ]
 
+const THEME_KEY = 'fe-quiz-theme'
+
+type ThemeMode = 'light' | 'dark'
+
+function getInitialTheme(): ThemeMode {
+  if (typeof window === 'undefined') return 'light'
+  const saved = window.localStorage.getItem(THEME_KEY)
+  if (saved === 'light' || saved === 'dark') return saved
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+}
+
 export function AppLayout() {
   const location = useLocation()
   const records = useStudyStore((s) => s.records)
   const favorites = useStudyStore((s) => s.favorites)
+  const [theme, setTheme] = useState<ThemeMode>(getInitialTheme)
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme
+    document.documentElement.style.colorScheme = theme
+    window.localStorage.setItem(THEME_KEY, theme)
+  }, [theme])
 
   const summary = useMemo(() => {
     const graded = Object.values(records).filter((r) => r.grading !== 'pending')
@@ -54,10 +74,19 @@ export function AppLayout() {
       <aside className="sidebar">
         <div className="sidebar-brand">
           <img className="brand-logo brand-logo-img" src="./myblog.png" alt="logo" />
-          <div>
+          <div className="brand-copy">
             <div className="brand-title">前端面试刷题</div>
             <div className="brand-sub">FE Interview Quiz</div>
           </div>
+          <button
+            type="button"
+            className="theme-toggle"
+            onClick={() => setTheme((current) => (current === 'dark' ? 'light' : 'dark'))}
+            aria-label={theme === 'dark' ? '切换到亮色模式' : '切换到暗色模式'}
+            title={theme === 'dark' ? '切换到亮色模式' : '切换到暗色模式'}
+          >
+            {theme === 'dark' ? <SunMedium size={16} /> : <MoonStar size={16} />}
+          </button>
         </div>
         <nav className="sidebar-nav">
           {NAV_ITEMS.map((item) => (
@@ -101,6 +130,15 @@ export function AppLayout() {
         {/* 移动端顶栏 */}
         <div className="mobile-topbar">
           <img className="brand-logo brand-logo-img" src="./myblog.png" alt="logo" />
+          <button
+            type="button"
+            className="theme-toggle theme-toggle-mobile"
+            onClick={() => setTheme((current) => (current === 'dark' ? 'light' : 'dark'))}
+            aria-label={theme === 'dark' ? '切换到亮色模式' : '切换到暗色模式'}
+            title={theme === 'dark' ? '切换到亮色模式' : '切换到暗色模式'}
+          >
+            {theme === 'dark' ? <SunMedium size={16} /> : <MoonStar size={16} />}
+          </button>
           {NAV_ITEMS.map((item) => (
             <NavLink
               key={item.to}
