@@ -109,12 +109,16 @@ export function Practice() {
     (nextIndex: number) => {
       const next = paper[nextIndex]
       if (!next) return
+      if (stateIds) {
+        setIndex(nextIndex)
+        return
+      }
       const nextParams = new URLSearchParams(sp)
       nextParams.set('start', next.id)
       navigate({ pathname: '/practice', search: `?${nextParams.toString()}` }, { replace: true })
       setIndex(nextIndex)
     },
-    [navigate, paper, sp],
+    [navigate, paper, sp, stateIds],
   )
 
   const goPrev = () => syncStart(Math.max(0, index - 1))
