@@ -4,6 +4,7 @@ import {
   BookMarked,
   Braces,
   Briefcase,
+  Database,
   Globe,
   Leaf,
   Network,
@@ -27,6 +28,7 @@ export const CATEGORY_ICONS: Record<string, LucideIcon> = {
   algorithm: Binary,
   scenario: Puzzle,
   project: Briefcase,
+  database: Database,
 }
 
 export function getCategoryIcon(category: string): LucideIcon {

@@ -82,6 +82,13 @@ export const categories: Category[] = [
     description: '农担智能体平台、慢 SQL 分析系统、BroadcastChannel、RBAC、FastAPI 与简历问答',
     sources: ['农担重点逻辑.md', '项目逻辑.md', '针对简历问答.md', '基于简历的问题.md', 'fastapi知识点.md'],
   },
+  {
+    id: 'database',
+    name: 'SQL & MongoDB',
+    color: '#087f5b',
+    description: 'SQL 基础、MySQL 索引与事务、慢查询优化、MongoDB 建模与数据库选型',
+    sources: ['收集的面试知识点.md', 'fastapi知识点.md', '基于简历的问题.md'],
+  },
 ]
 
 export const categoryMap: Record<string, Category> = Object.fromEntries(

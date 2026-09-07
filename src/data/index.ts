@@ -11,6 +11,7 @@ import { engineeringQuestions } from './questions/engineering'
 import { algorithmQuestions } from './questions/algorithm'
 import { scenarioQuestions } from './questions/scenario'
 import { projectQuestions } from './questions/project'
+import { databaseQuestions } from './questions/database'
 
 const rawBanks: Record<string, RawQuestion[]> = {
   'html-css': htmlCssQuestions,
@@ -24,6 +25,7 @@ const rawBanks: Record<string, RawQuestion[]> = {
   algorithm: algorithmQuestions,
   scenario: scenarioQuestions,
   project: projectQuestions,
+  database: databaseQuestions,
 }
 
 const OPTION_LABELS = 'ABCDEFGH'
