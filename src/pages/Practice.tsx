@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Link, useLocation, useSearchParams } from 'react-router-dom'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react'
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import {
   ChevronLeft,
   ChevronRight,
@@ -31,6 +31,7 @@ interface PersistedSession {
 
 export function Practice() {
   const location = useLocation()
+  const navigate = useNavigate()
   const [sp] = useSearchParams()
   const submitAnswer = useStudyStore((s) => s.submitAnswer)
   const selfAssess = useStudyStore((s) => s.selfAssess)
@@ -58,18 +59,25 @@ export function Practice() {
   // 恢复上次会话（同一份卷子时）
   const restored = useMemo(() => {
     if (paper.length === 0) return { index: 0, session: {} as Record<string, SessionItem> }
+    const startIndex = filters.start ? paper.findIndex((q) => q.id === filters.start) : -1
     const saved = readLS<PersistedSession | null>(LS_KEYS.paper, null)
     if (saved && saved.ids.length === paper.length && saved.ids.every((id, i) => id === paper[i].id)) {
-      return { index: saved.index, session: saved.session }
+      return { index: startIndex >= 0 ? startIndex : saved.index, session: saved.session }
     }
-    return { index: 0, session: {} as Record<string, SessionItem> }
-  }, [paper])
+    return { index: startIndex >= 0 ? startIndex : 0, session: {} as Record<string, SessionItem> }
+  }, [paper, filters.start])
 
   const [index, setIndex] = useState(restored.index)
   const [session, setSession] = useState<Record<string, SessionItem>>(restored.session)
   const [finished, setFinished] = useState(false)
 
   const current = paper[index]
+
+  useLayoutEffect(() => {
+    setIndex(restored.index)
+    setSession(restored.session)
+    setFinished(false)
+  }, [restored])
 
   // 会话持久化到 sessionStorage 级别的 localStorage（刷新可恢复）
   useEffect(() => {
@@ -97,9 +105,21 @@ export function Practice() {
 
   const answeredCount = paper.filter((q) => session[q.id]).length
 
-  const goPrev = () => setIndex((i) => Math.max(0, i - 1))
+  const syncStart = useCallback(
+    (nextIndex: number) => {
+      const next = paper[nextIndex]
+      if (!next) return
+      const nextParams = new URLSearchParams(sp)
+      nextParams.set('start', next.id)
+      navigate({ pathname: '/practice', search: `?${nextParams.toString()}` }, { replace: true })
+      setIndex(nextIndex)
+    },
+    [navigate, paper, sp],
+  )
+
+  const goPrev = () => syncStart(Math.max(0, index - 1))
   const goNext = () => {
-    if (index < paper.length - 1) setIndex((i) => i + 1)
+    if (index < paper.length - 1) syncStart(index + 1)
   }
 
   usePracticeHotkey(!finished, goPrev, goNext)
@@ -161,6 +181,10 @@ export function Practice() {
                 setSession({})
                 setIndex(0)
                 setFinished(false)
+                const nextParams = new URLSearchParams(sp)
+                const first = paper[0]
+                if (first) nextParams.set('start', first.id)
+                navigate({ pathname: '/practice', search: `?${nextParams.toString()}` }, { replace: true })
               }}
             >
               <RotateCcw size={14} />
@@ -249,7 +273,7 @@ export function Practice() {
               else if (g === 'wrong') cls += ' answered-wrong'
               else if (g === 'pending') cls += ' answered-pending'
               return (
-                <button key={q.id} className={cls} onClick={() => setIndex(i)} title={q.id}>
+                <button key={q.id} className={cls} onClick={() => syncStart(i)} title={q.id}>
                   {i + 1}
                 </button>
               )
