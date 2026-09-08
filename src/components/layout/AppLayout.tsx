@@ -73,7 +73,7 @@ export function AppLayout() {
     <div className="app-shell">
       <aside className="sidebar">
         <div className="sidebar-brand">
-          <img className="brand-logo brand-logo-img" src="./myblog.png" alt="logo" />
+          <img className="brand-logo brand-logo-img" src="./myblog.png" alt="logo" onClick={() => window.location.href = window.location.origin}/>
           <div className="brand-copy">
             <div className="brand-title">前端面试刷题</div>
             <div className="brand-sub">FE Interview Quiz</div>
@@ -129,7 +129,9 @@ export function AppLayout() {
       <div className="main-area">
         {/* 移动端顶栏 */}
         <div className="mobile-topbar">
-          <img className="brand-logo brand-logo-img" src="./myblog.png" alt="logo" />
+          <NavLink
+              to={"/"}
+            ><img className="brand-logo brand-logo-img" src="./myblog.png" alt="logo" /></NavLink>
           <button
             type="button"
             className="theme-toggle theme-toggle-mobile"

@@ -146,7 +146,7 @@ export const databaseQuestions: RawQuestion[] = [
     type: 'multiple',
     diff: 'medium',
     sub: 'MySQL 索引',
-    q: '以下联合索引为 \`(name, age, gender)\` 时，哪些条件更容易使用它？',
+    q: '以下联合索引为 `(name, age, gender)` 时，哪些条件更容易使用它？',
     opts: [
       'WHERE age = ?',
       'WHERE name = ?',

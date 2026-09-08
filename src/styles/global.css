@@ -130,6 +130,20 @@ button {
   flex-shrink: 0;
   background: var(--surface);
 }
+/* 在 CSS 文件中添加 */
+.brand-logo-img {
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius:100%; /* 可选，让边框圆角 */
+  transform: scale(1.2);
+}
+
+.brand-logo-img:hover {
+  transform: scale(1.4);
+  border-color: #3B5BF5;
+  box-shadow: 0 0 20px rgba(42, 141, 254, 0.6);
+}
 
 .brand-copy {
   min-width: 0;
