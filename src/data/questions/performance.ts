@@ -329,4 +329,61 @@ export const performanceQuestions: RawQuestion[] = [
     keys: ['transform 合成', 'DocumentFragment', '读写分离'],
     src: '前端性能优化面试题.md / 浏览器原理知识点.md',
   },
+  {
+    id: 'pf-015',
+    type: 'essay',
+    diff: 'medium',
+    sub: '运行时性能',
+    q: '什么是 Long Task？它会影响哪些性能指标？前端如何拆分长任务？',
+    ans: `**面试回答：**Long Task 指主线程上连续执行超过 50ms 的任务。它会阻塞用户输入、样式计算、布局和绘制，导致页面点击没有响应，直接影响 INP，也可能间接影响 LCP 和动画流畅度。
+
+**常见来源**：大包同步执行、大量 JSON 解析、大数组计算、一次性渲染大量 DOM、复杂递归或循环、第三方脚本初始化。
+
+**优化方式**：
+1. 代码分割和延迟初始化，减少首屏同步 JS；
+2. 大任务拆成小块，用 requestIdleCallback、setTimeout、scheduler 或 requestAnimationFrame 分批执行；
+3. 纯计算放到 Web Worker，主线程只接收结果并渲染；
+4. 列表渲染用虚拟列表或分页；
+5. 用 Chrome Performance 看 Main Thread 中的长任务和调用栈，再针对热点优化。`,
+    ana: 'Long Task 的关键不是背 50ms，而是说明它占用主线程并影响交互响应。',
+    keys: ['Long Task', '主线程阻塞', 'INP', 'Web Worker', '任务切片'],
+    src: '前端性能优化面试题.md',
+  },
+  {
+    id: 'pf-016',
+    type: 'single',
+    diff: 'medium',
+    sub: '首屏优化',
+    q: '首屏最大内容是一张关键图片时，下面哪个做法通常不合适？',
+    opts: [
+      '为图片设置 width/height 或 aspect-ratio',
+      '对关键图片使用 preload 或 fetchpriority="high"',
+      '给首屏关键图片统一添加 loading="lazy"',
+      '使用 WebP/AVIF 并提供合理兜底',
+    ],
+    ans: 'C',
+    ana: '首屏 LCP 图片如果懒加载，会推迟浏览器发现和下载资源，通常会让 LCP 变差。关键图片应尽早暴露给浏览器，并设置尺寸避免 CLS。',
+    keys: ['LCP 图片', 'preload', 'fetchpriority', '首屏图不懒加载'],
+    src: '前端性能优化.md',
+  },
+  {
+    id: 'pf-017',
+    type: 'essay',
+    diff: 'medium',
+    sub: '字体优化',
+    q: 'Web 字体加载会带来哪些性能问题？如何优化字体加载体验？',
+    ans: `**面试回答：**Web 字体可能带来三类问题：字体文件体积大导致首屏变慢；字体加载期间文字不可见或样式突变；字体替换时字形宽度变化引起 CLS。
+
+**优化手段**：
+1. 只引入需要的字重、字符集，中文字体尽量子集化；
+2. 关键字体用 preload，并设置正确的 as="font"、type 和 crossorigin；
+3. 使用 font-display: swap/optional，避免文字长期不可见；
+4. 选择尺寸接近的 fallback 字体，降低字体切换带来的布局偏移；
+5. 字体文件放 CDN 并设置长期缓存。
+
+如果是后台系统，优先使用系统字体栈，通常比引入大体积自定义字体更稳。`,
+    ana: '字体优化要同时考虑加载速度、可见性和 CLS，不能只说 preload。',
+    keys: ['font-display', 'preload font', '字体子集化', 'CLS'],
+    src: '前端性能优化.md',
+  },
 ]

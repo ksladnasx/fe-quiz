@@ -679,4 +679,61 @@ export const htmlCssQuestions: RawQuestion[] = [
     keys: ['空白字符', 'font-size: 0', 'flex 布局'],
     src: '从零开始的前端面试题.md',
   },
+  {
+    id: 'hc-036',
+    type: 'essay',
+    diff: 'medium',
+    sub: '布局与适配',
+    q: 'CSS Grid 和 Flex 布局有什么区别？分别适合什么场景？',
+    ans: `**面试回答：**
+
+- **Flex** 是一维布局，主要解决一行或一列上的空间分配与对齐问题，适合导航栏、按钮组、左右两栏、卡片内部内容排列；
+- **Grid** 是二维布局，可以同时控制行和列，适合整体页面骨架、复杂仪表盘、九宫格、固定行列结构的内容区。
+
+**核心区别**：Flex 更关注“内容如何在主轴上伸缩”；Grid 更关注“容器如何划分行列区域”。
+
+**常用 Grid 属性**：\`grid-template-columns\`、\`grid-template-rows\`、\`gap\`、\`grid-column\`、\`grid-row\`、\`place-items\`。例如：
+
+\`\`\`css
+.layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 16px;
+}
+\`\`\`
+
+实际项目里经常组合使用：外层大布局用 Grid，局部组件内部对齐用 Flex。`,
+    ana: 'Flex 一维、Grid 二维是最重要的区分。不要把两者说成替代关系。',
+    keys: ['Flex 一维', 'Grid 二维', 'grid-template-columns', '组合使用'],
+    src: 'CSS 布局高频题',
+  },
+  {
+    id: 'hc-037',
+    type: 'single',
+    diff: 'medium',
+    sub: 'CSS 基础',
+    q: '下面哪个属性最常用于创建新的层叠上下文（Stacking Context）？',
+    opts: ['z-index: auto', 'position: static', 'opacity: 0.9', 'display: block'],
+    ans: 'C',
+    ana: 'opacity 小于 1 会创建新的层叠上下文。常见触发条件还包括：定位元素设置非 auto 的 z-index、position: fixed/sticky、transform/filter/perspective 不为 none、will-change、isolation: isolate、flex/grid 子项设置 z-index 等。层叠上下文内部的 z-index 只在本上下文内比较，不能无限压过外部元素。',
+    keys: ['层叠上下文', 'opacity < 1', 'transform', 'z-index 比较范围'],
+    src: 'CSS 层叠上下文高频题',
+  },
+  {
+    id: 'hc-038',
+    type: 'multiple',
+    diff: 'medium',
+    sub: 'HTML 基础',
+    q: '关于响应式图片，下列哪些说法是正确的？（多选）',
+    opts: [
+      'srcset 可以提供不同宽度或像素密度的候选图片',
+      'sizes 用于告诉浏览器图片在不同视口下的展示宽度',
+      '首屏 LCP 图片通常应该直接懒加载以节省带宽',
+      'picture 标签可以根据媒体条件或图片格式选择不同资源',
+    ],
+    ans: ['A', 'B', 'D'],
+    ana: 'srcset 提供候选资源，sizes 告诉浏览器当前布局下图片槽位宽度，浏览器结合 DPR 和视口选择最合适的图片。picture/source 可以做格式兜底（AVIF/WebP/JPEG）或按媒体条件切图。首屏 LCP 图片不建议 lazy，否则可能推迟最大内容绘制。',
+    keys: ['srcset', 'sizes', 'picture/source', 'LCP 图片不懒加载'],
+    src: 'HTML 响应式图片高频题',
+  },
 ]

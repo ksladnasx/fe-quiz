@@ -600,4 +600,56 @@ function Timer() {
     keys: ['废弃的生命周期', 'getDerivedStateFromProps', 'Fiber 不安全'],
     src: 'React框架面试题.md',
   },
+  {
+    id: 'ra-028',
+    type: 'essay',
+    diff: 'medium',
+    sub: 'Hooks',
+    q: 'useMemo 和 useCallback 有什么区别？为什么不建议无脑使用？',
+    ans: `**面试回答：**
+
+**useMemo**：缓存一个计算结果，依赖不变时返回上次的值，适合开销较大的派生计算，或稳定对象/数组引用；
+**useCallback**：缓存一个函数引用，本质上等价于 "useMemo(() => fn, deps)"，常用于把回调传给 React.memo 子组件，避免每次父组件渲染都生成新函数引用。
+
+**使用场景**：子组件用了 React.memo 且依赖 props 浅比较时，稳定函数/对象引用才有价值；或者计算确实昂贵，缓存能减少重复计算。
+
+**不建议无脑使用**：useMemo/useCallback 本身也有依赖比较和缓存维护成本，代码还会更复杂。普通轻量计算、没有传给 memo 子组件的函数，直接写通常更清晰。`,
+    ana: '关键是说明“配合 memo 或昂贵计算才有意义”，不是看到函数就包 useCallback。',
+    keys: ['缓存计算结果', '缓存函数引用', 'React.memo', '依赖比较成本'],
+    src: 'React Hooks 高频题',
+  },
+  {
+    id: 'ra-029',
+    type: 'single',
+    diff: 'medium',
+    sub: 'Hooks',
+    q: 'useRef 修改 ref.current 后，React 默认会发生什么？',
+    opts: [
+      '立即触发组件重新渲染',
+      '不会触发重新渲染，但当前值会在多次渲染之间保持',
+      '会清空组件 state',
+      '只能在 class 组件中使用',
+    ],
+    ans: 'B',
+    ana: 'useRef 返回稳定对象 `{ current }`，修改 current 不会触发渲染，但这个对象会在组件生命周期内保持同一引用。它适合保存 DOM 引用、定时器 ID、WebSocket/SSE 实例、最新回调等不直接参与 UI 展示的数据。参与视图展示的数据应使用 state。',
+    keys: ['不触发渲染', '稳定引用', '保存实例'],
+    src: 'React Hooks 高频题',
+  },
+  {
+    id: 'ra-030',
+    type: 'essay',
+    diff: 'medium',
+    sub: '组件基础',
+    q: 'React Error Boundary 能捕获哪些错误？有哪些捕获不到？',
+    ans: `**面试回答：**Error Boundary 是 React 的错误边界组件，用 class 组件实现，核心生命周期是 "getDerivedStateFromError" 和 "componentDidCatch"。
+
+**能捕获**：子组件在渲染阶段、生命周期方法、构造函数中抛出的错误。捕获后可以展示兜底 UI，并在 componentDidCatch 中上报错误信息。
+
+**捕获不到**：事件处理函数中的错误、异步回调（setTimeout、Promise）里的错误、服务端渲染错误、Error Boundary 自己内部抛出的错误。这些需要 try/catch、window.onerror、unhandledrejection 或请求层拦截器配合处理。
+
+**实践建议**：一般在路由级或关键业务模块外层包裹 Error Boundary，做到局部模块异常不拖垮整个应用。`,
+    ana: 'Error Boundary 只兜 React 渲染链路，不是所有 JS 异常的万能捕获器。',
+    keys: ['getDerivedStateFromError', 'componentDidCatch', '渲染错误', '异步错误捕获不到'],
+    src: 'React 稳定性高频题',
+  },
 ]

@@ -869,4 +869,54 @@ scheduler.add(task(300, 'C')).then(console.log)  // 1.5s 后 C（等名额）
     keys: ['微任务清单', '宏任务清单', '清空微任务再取宏任务'],
     src: '一些高频率考点.md / 知识点快速复习指南.md',
   },
+  {
+    id: 'js-041',
+    type: 'essay',
+    diff: 'medium',
+    sub: 'ES6',
+    q: 'Proxy 和 Reflect 的作用是什么？Vue3 为什么会用 Proxy 做响应式？',
+    ans: `**面试回答：**
+
+**Proxy** 用来创建对象代理，可以拦截对象的 get、set、deleteProperty、has、ownKeys 等操作；**Reflect** 提供与这些拦截操作对应的默认行为方法，如 Reflect.get、Reflect.set，返回值语义更规范。
+
+**常见用途**：数据响应式、数据校验、只读对象、日志追踪、隐藏内部属性等。
+
+**Vue3 使用 Proxy 的原因**：相比 Object.defineProperty 只能劫持已有属性，Proxy 代理的是整个对象，能自然监听新增属性、删除属性、数组下标和 length 变化，也可以代理 Map/Set 等集合类型。配合 Reflect 可以保留原始对象行为，并正确处理 getter 中的 this 指向。
+
+**限制**：Proxy 无法代理基本类型，只能代理对象；对旧浏览器兼容性差，不能被完整 polyfill。`,
+    ana: '回答要从“代理整个对象”解释 Vue3 的优势，而不是只说 Proxy 更强。',
+    keys: ['get/set 拦截', 'Reflect 默认行为', '新增删除属性', 'Map/Set'],
+    src: 'ES6 高频题 / Vue 响应式原理',
+  },
+  {
+    id: 'js-042',
+    type: 'single',
+    diff: 'medium',
+    sub: '异步编程',
+    q: '下面代码的输出顺序是什么？\n\n```js\nconsole.log(1)\nsetTimeout(() => console.log(2))\nPromise.resolve().then(() => console.log(3)).then(() => console.log(4))\nconsole.log(5)\n```',
+    opts: ['1 2 3 4 5', '1 5 3 4 2', '1 3 4 5 2', '1 5 2 3 4'],
+    ans: 'B',
+    ana: '同步代码先执行，输出 1 和 5；setTimeout 回调进入宏任务队列；Promise.then 进入微任务队列。当前宏任务结束后先清空微任务，链式 then 中第一个 then 输出 3，并把第二个 then 再加入微任务队列，随后输出 4；最后执行下一个宏任务输出 2。',
+    keys: ['同步先执行', 'Promise 微任务', 'setTimeout 宏任务', '链式 then'],
+    src: '事件循环高频输出题',
+  },
+  {
+    id: 'js-043',
+    type: 'essay',
+    diff: 'medium',
+    sub: 'ES6',
+    q: 'Iterator、Generator 和 for...of 之间是什么关系？',
+    ans: `**面试回答：**
+
+**Iterator** 是一种统一遍历协议：对象实现 \`Symbol.iterator\` 方法并返回迭代器，迭代器有 "next()" 方法，每次返回 \`{ value, done }\`。
+
+**for...of** 本质上就是读取对象的 "Symbol.iterator"，不断调用 next，直到 done 为 true。数组、字符串、Map、Set、arguments、NodeList 等默认可迭代；普通对象默认不可迭代。
+
+**Generator** 是生成迭代器的语法糖。function 定义生成器函数，调用后返回迭代器对象，内部用 "yield" 暂停和恢复执行。
+
+**使用场景**：自定义集合遍历、惰性序列、异步流程控制。async/await 的早期实现思路就可以看成 Generator + Promise 自动执行器。`,
+    ana: '三者关系：Iterator 是协议，for...of 是消费协议的语法，Generator 是创建迭代器的语法糖。',
+    keys: ['Symbol.iterator', 'next()', 'yield', 'for...of'],
+    src: 'ES6 高频题',
+  },
 ]

@@ -580,4 +580,58 @@ const routes = [
     keys: ['Composition API', 'Proxy', 'Fragment'],
     src: '一些高频率考点.md / 收集的面试知识点.md',
   },
+  {
+    id: 'vue-028',
+    type: 'essay',
+    diff: 'medium',
+    sub: 'Composition API',
+    q: 'watch 和 watchEffect 有什么区别？实际开发中分别适合什么场景？',
+    ans: `**面试回答：**
+
+- **watch**：显式指定监听源，只有监听源变化时才执行回调；可以拿到 newValue 和 oldValue，适合“某个明确数据变化后做副作用”，如路由参数变化重新请求、表单字段变化触发校验；
+- **watchEffect**：不需要手动声明依赖，会在执行函数时自动收集用到的响应式数据，并且默认立即执行一次；适合依赖较多、只关心“用到的数据变了就重新同步”的场景。
+
+**关键区别**：watch 更精确、可控，能拿新旧值；watchEffect 更自动，但依赖来源不够显式，复杂逻辑中可读性会下降。
+
+**补充**：两者都可以返回清理函数或使用 onCleanup，处理请求取消、定时器清理等副作用。需要 DOM 更新后再执行时可配置 flush: 'post'。`,
+    ana: 'watch 显式依赖、watchEffect 自动依赖；是否需要 oldValue 是选择 watch 的重要依据。',
+    keys: ['显式依赖', '自动收集依赖', 'oldValue', 'flush: post'],
+    src: 'Vue 组合式 API 高频题',
+  },
+  {
+    id: 'vue-029',
+    type: 'single',
+    diff: 'medium',
+    sub: '组件基础',
+    q: 'Vue3 中自定义组件使用 v-model 时，默认对应的 prop 和事件分别是什么？',
+    opts: [
+      'value 和 input',
+      'modelValue 和 update:modelValue',
+      'checked 和 change',
+      'value 和 update:value',
+    ],
+    ans: 'B',
+    ana: 'Vue3 自定义组件的 v-model 默认展开为 `:modelValue="xxx"` 和 `@update:modelValue="xxx = $event"`。Vue2 默认是 value + input。Vue3 还支持多个 v-model，如 `v-model:title` 对应 title + update:title。',
+    keys: ['modelValue', 'update:modelValue', '多个 v-model'],
+    src: 'Vue 组件通信高频题',
+  },
+  {
+    id: 'vue-030',
+    type: 'essay',
+    diff: 'medium',
+    sub: '状态管理',
+    q: 'Pinia 相比 Vuex 有哪些优势？在项目中如何划分 store？',
+    ans: `**面试回答：**Pinia 是 Vue3 官方推荐的状态管理方案，相比 Vuex 更轻量：
+
+1. **没有 mutation**：action 可以同步或异步地直接修改 state，模板代码更少；
+2. **类型推导更好**：天然适配 TypeScript，state/getters/actions 的类型更清晰；
+3. **模块更自然**：每个 \`defineStore\` 就是一个独立模块，不需要 namespaced；
+4. **组合式 API 友好**：可以在 setup 中直接使用 store，逻辑组织更贴近 Vue3；
+5. DevTools、插件、持久化生态也比较完整。
+
+**store 划分**：按业务域拆分，如 userStore 管登录态和用户信息，permissionStore 管菜单/路由权限，appStore 管主题和全局配置。页面私有状态不要都塞进 store，只有跨页面共享、需要持久化或需要统一管理的状态才放进去。`,
+    ana: 'Pinia 的核心优势是去 mutation、TS 友好、模块天然化。也要说明不是所有 state 都应该全局化。',
+    keys: ['无 mutation', 'TypeScript 友好', 'defineStore', '按业务域拆分'],
+    src: 'Vue 状态管理高频题',
+  },
 ]

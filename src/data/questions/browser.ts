@@ -390,4 +390,52 @@ export const browserQuestions: RawQuestion[] = [
     keys: ['强缓存 vs 协商缓存', 'Cache-Control 优先', '304'],
     src: '知识点快速复习指南.md / 浏览器原理知识点.md',
   },
+  {
+    id: 'br-019',
+    type: 'essay',
+    diff: 'medium',
+    sub: '资源加载',
+    q: 'preload、prefetch、dns-prefetch 和 preconnect 有什么区别？',
+    ans: `**面试回答：**这些都是资源加载提示，但优先级和目标不同：
+
+1. **preload**：预加载当前页面马上要用的关键资源，优先级高，如首屏字体、LCP 图片、关键 JS。必须资源确实会用，否则浪费带宽；
+2. **prefetch**：空闲时预取未来可能访问页面的资源，优先级低，如下一页路由 chunk；
+3. **dns-prefetch**：提前做 DNS 解析，只解决域名到 IP 的查询耗时；
+4. **preconnect**：提前完成 DNS、TCP 握手、TLS 握手，适合即将访问的第三方域名，如 CDN、字体域名。
+
+**选择**：当前页关键资源用 preload；未来页资源用 prefetch；第三方域名访问前可用 dns-prefetch/preconnect。preconnect 成本更高，域名不多且确定会访问时再用。`,
+    ana: 'preload 当前页高优先级，prefetch 未来页低优先级；preconnect 比 dns-prefetch 做得更多也更贵。',
+    keys: ['preload 当前页', 'prefetch 未来页', 'dns-prefetch', 'preconnect'],
+    src: '浏览器资源加载高频题',
+  },
+  {
+    id: 'br-020',
+    type: 'single',
+    diff: 'medium',
+    sub: '浏览器安全',
+    q: 'Cookie 的 SameSite=Lax 主要能降低哪类攻击风险？',
+    opts: ['XSS 脚本注入', 'CSRF 跨站请求伪造', 'SQL 注入', 'DNS 污染'],
+    ans: 'B',
+    ana: 'SameSite 用于限制第三方站点发起请求时是否携带 Cookie。Lax 在大多数跨站子请求中不携带 Cookie，可以降低 CSRF 风险；Strict 更严格；None 表示允许跨站携带，但必须同时设置 Secure。XSS 的核心防护是输出转义、CSP、HttpOnly 等。',
+    keys: ['SameSite', 'CSRF', 'Lax', 'Secure'],
+    src: '浏览器安全高频题',
+  },
+  {
+    id: 'br-021',
+    type: 'essay',
+    diff: 'medium',
+    sub: '渲染原理',
+    q: 'DOMContentLoaded 和 load 事件有什么区别？它们分别在什么时候触发？',
+    ans: `**面试回答：**
+
+- **DOMContentLoaded**：HTML 文档被完整解析，DOM 树构建完成后触发；不需要等待图片、视频等外部资源加载完成；但会受到 defer 脚本、阻塞脚本和 CSS 对脚本执行的影响；
+- **load**：页面所有资源都加载完成后触发，包括图片、样式、字体、iframe 等，通常比 DOMContentLoaded 晚。
+
+**使用场景**：只需要操作 DOM 结构时监听 DOMContentLoaded；需要依赖图片尺寸、字体或 iframe 等资源完全加载时再用 load。
+
+**补充**：defer 脚本会在 DOM 解析完成后、DOMContentLoaded 之前按顺序执行；async 脚本下载完立即执行，执行时机不确定。`,
+    ana: 'DOMContentLoaded 关注 DOM 就绪，load 关注所有资源就绪。defer 与 DOMContentLoaded 的关系是常见追问。',
+    keys: ['DOM 解析完成', '所有资源加载完成', 'defer 脚本', 'async 时机'],
+    src: '浏览器渲染高频题',
+  },
 ]

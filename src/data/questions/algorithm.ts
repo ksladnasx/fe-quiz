@@ -658,4 +658,68 @@ function countSubstrings(s) {
     keys: ['比较排序下界', 'TimSort', 'O(n²) 对比'],
     src: '基础算法.md',
   },
+  {
+    id: 'al-022',
+    type: 'code',
+    diff: 'medium',
+    sub: '双指针与滑动窗口',
+    q: '最长无重复子串怎么求？请写出滑动窗口思路。',
+    ans: `**面试回答：**用滑动窗口维护一个没有重复字符的区间。
+
+\`\`\`js
+function lengthOfLongestSubstring(s) {
+  const map = new Map()
+  let left = 0
+  let ans = 0
+
+  for (let right = 0; right < s.length; right++) {
+    const ch = s[right]
+    if (map.has(ch) && map.get(ch) >= left) {
+      left = map.get(ch) + 1
+    }
+    map.set(ch, right)
+    ans = Math.max(ans, right - left + 1)
+  }
+
+  return ans
+}
+\`\`\`
+
+**思路**：right 不断向右扩展窗口；遇到重复字符且它的位置在当前窗口内，就把 left 移到上一次出现位置的后一位。Map 记录字符最近一次出现下标。
+
+**复杂度**：每个字符最多进出窗口一次，时间 O(n)，空间 O(k)。`,
+    ana: '关键是 `map.get(ch) >= left`，避免被窗口左侧已经失效的旧重复字符误伤。',
+    keys: ['滑动窗口', 'Map 记录下标', 'left 跳跃', 'O(n)'],
+    src: '基础算法高频题',
+  },
+  {
+    id: 'al-023',
+    type: 'single',
+    diff: 'medium',
+    sub: '动态规划',
+    q: '爬楼梯问题：每次可以爬 1 或 2 阶，爬到第 n 阶的状态转移方程是什么？',
+    opts: ['dp[n] = dp[n - 1] + dp[n - 2]', 'dp[n] = dp[n - 1] * 2', 'dp[n] = n * n', 'dp[n] = max(dp[n - 1], dp[n - 2])'],
+    ans: 'A',
+    ana: '到第 n 阶只有两种来源：从 n-1 阶再爬 1 阶，或从 n-2 阶再爬 2 阶，所以 dp[n] = dp[n-1] + dp[n-2]。初始化一般是 dp[1] = 1，dp[2] = 2。它本质是斐波那契模型，可用两个变量滚动优化到 O(1) 空间。',
+    keys: ['斐波那契模型', '状态转移', '滚动变量'],
+    src: '动态规划入门题',
+  },
+  {
+    id: 'al-024',
+    type: 'essay',
+    diff: 'medium',
+    sub: '树与图',
+    q: 'BFS 和 DFS 有什么区别？分别适合解决什么问题？',
+    ans: `**面试回答：**
+
+- **DFS（深度优先搜索）**：沿一条路径尽可能往深处走，走不通再回溯。通常用递归或栈实现，适合树的遍历、路径枚举、回溯、连通区域感染、拓扑递归等问题；
+- **BFS（广度优先搜索）**：按层向外扩展，通常用队列实现，适合求无权图最短路径、二叉树层序遍历、最少步数问题。
+
+**复杂度**：在图中二者通常都是 O(V + E)，空间取决于递归栈/队列中同时保存的节点数量。
+
+**选择**：要求“最少几步、最短距离、按层遍历”优先 BFS；要求“枚举所有可能、判断是否存在路径、递归结构明显”优先 DFS。`,
+    ana: '一句话：DFS 适合深挖与回溯，BFS 适合层序和无权最短路。',
+    keys: ['递归/栈', '队列', '层序遍历', '无权最短路'],
+    src: '基础算法高频题',
+  },
 ]
