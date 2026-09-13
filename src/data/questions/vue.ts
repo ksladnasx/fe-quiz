@@ -596,7 +596,7 @@ const routes = [
 **补充**：两者都可以返回清理函数或使用 onCleanup，处理请求取消、定时器清理等副作用。需要 DOM 更新后再执行时可配置 flush: 'post'。`,
     ana: 'watch 显式依赖、watchEffect 自动依赖；是否需要 oldValue 是选择 watch 的重要依据。',
     keys: ['显式依赖', '自动收集依赖', 'oldValue', 'flush: post'],
-    src: 'Vue 组合式 API 高频题',
+    src: 'Vue框架面试题.md / 知识点快速复习指南.md',
   },
   {
     id: 'vue-029',
@@ -613,7 +613,7 @@ const routes = [
     ans: 'B',
     ana: 'Vue3 自定义组件的 v-model 默认展开为 `:modelValue="xxx"` 和 `@update:modelValue="xxx = $event"`。Vue2 默认是 value + input。Vue3 还支持多个 v-model，如 `v-model:title` 对应 title + update:title。',
     keys: ['modelValue', 'update:modelValue', '多个 v-model'],
-    src: 'Vue 组件通信高频题',
+    src: 'Vue框架面试题.md / 一些高频率考点.md',
   },
   {
     id: 'vue-030',
@@ -632,6 +632,30 @@ const routes = [
 **store 划分**：按业务域拆分，如 userStore 管登录态和用户信息，permissionStore 管菜单/路由权限，appStore 管主题和全局配置。页面私有状态不要都塞进 store，只有跨页面共享、需要持久化或需要统一管理的状态才放进去。`,
     ana: 'Pinia 的核心优势是去 mutation、TS 友好、模块天然化。也要说明不是所有 state 都应该全局化。',
     keys: ['无 mutation', 'TypeScript 友好', 'defineStore', '按业务域拆分'],
-    src: 'Vue 状态管理高频题',
+    src: 'Vue框架面试题.md / 知识点快速复习指南.md',
+  },
+  {
+    id: 'vue-031',
+    type: 'judge',
+    diff: 'medium',
+    sub: '响应式原理',
+    q: 'Vue3 的 reactive 对象直接解构后，解构出来的普通变量仍然天然保持响应式。',
+    ans: false,
+    ana: 'reactive 返回的是 Proxy 代理对象，直接解构会把属性值取出来赋给普通变量，失去响应式连接。需要保持响应式时可以使用 toRef、toRefs，或者在使用处继续通过 reactive 对象访问属性。',
+    keys: ['reactive 解构', 'toRefs', 'Proxy', '响应式丢失'],
+    src: 'Vue框架面试题.md / 前端面试八股文.md',
+  },
+  {
+    id: 'vue-032',
+    type: 'essay',
+    diff: 'medium',
+    sub: '组件通信',
+    q: 'Vue 中 attrs 和 slots 适合解决什么问题？封装组件时如何使用它们？',
+    ans: `**面试回答：**attrs 用于接收父组件传入但当前组件没有显式声明为 props 的属性和事件，常用于二次封装基础组件时透传 class、style、事件和原生属性。Vue3 中可以通过 useAttrs 获取，必要时用 inheritAttrs 控制是否自动落到根节点。
+
+slots 用于把父组件提供的内容交给子组件渲染，适合表格列、自定义按钮、弹窗内容等需要业务方扩展结构的场景。封装组件时，一般用 props 控制数据和配置，用 emit 暴露事件，用 attrs 做透传，用 slots 提供可扩展区域。`,
+    ana: '组件封装题要说明 props、emit、attrs、slots 的边界：配置、事件、透传和内容扩展分别负责不同问题。',
+    keys: ['$attrs', 'slots', '组件封装', '透传', '扩展点'],
+    src: 'Vue框架面试题.md / 问答类型面试题.md',
   },
 ]

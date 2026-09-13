@@ -705,7 +705,7 @@ export const htmlCssQuestions: RawQuestion[] = [
 实际项目里经常组合使用：外层大布局用 Grid，局部组件内部对齐用 Flex。`,
     ana: 'Flex 一维、Grid 二维是最重要的区分。不要把两者说成替代关系。',
     keys: ['Flex 一维', 'Grid 二维', 'grid-template-columns', '组合使用'],
-    src: 'CSS 布局高频题',
+    src: '从零开始的前端面试题.md / 面试问答.md',
   },
   {
     id: 'hc-037',
@@ -717,7 +717,7 @@ export const htmlCssQuestions: RawQuestion[] = [
     ans: 'C',
     ana: 'opacity 小于 1 会创建新的层叠上下文。常见触发条件还包括：定位元素设置非 auto 的 z-index、position: fixed/sticky、transform/filter/perspective 不为 none、will-change、isolation: isolate、flex/grid 子项设置 z-index 等。层叠上下文内部的 z-index 只在本上下文内比较，不能无限压过外部元素。',
     keys: ['层叠上下文', 'opacity < 1', 'transform', 'z-index 比较范围'],
-    src: 'CSS 层叠上下文高频题',
+    src: '从零开始的前端面试题.md / 一些高频率考点.md',
   },
   {
     id: 'hc-038',
@@ -734,6 +734,36 @@ export const htmlCssQuestions: RawQuestion[] = [
     ans: ['A', 'B', 'D'],
     ana: 'srcset 提供候选资源，sizes 告诉浏览器当前布局下图片槽位宽度，浏览器结合 DPR 和视口选择最合适的图片。picture/source 可以做格式兜底（AVIF/WebP/JPEG）或按媒体条件切图。首屏 LCP 图片不建议 lazy，否则可能推迟最大内容绘制。',
     keys: ['srcset', 'sizes', 'picture/source', 'LCP 图片不懒加载'],
-    src: 'HTML 响应式图片高频题',
+    src: '从零开始的前端面试题.md / 前端性能优化面试题.md',
+  },
+  {
+    id: 'hc-039',
+    type: 'multiple',
+    diff: 'medium',
+    sub: 'HTML 基础',
+    q: '关于前端无障碍访问（Accessibility），下列哪些做法是合理的？（多选）',
+    opts: [
+      '为图片提供有意义的 alt 文本',
+      '表单控件和 label 建立明确关联',
+      '只用颜色区分错误和正常状态',
+      '保证按钮、链接等可交互元素可以通过键盘访问',
+    ],
+    ans: ['A', 'B', 'D'],
+    ana: '无障碍访问要求页面能被不同用户和辅助技术理解、操作。图片 alt、label 关联、键盘可达性都很重要；只靠颜色表达状态会让色弱用户或屏幕阅读器用户难以识别，应配合文本、图标或 aria 信息。',
+    keys: ['alt', 'label', '键盘可达', '无障碍访问'],
+    src: '从零开始的前端面试题.md / 面试问答.md',
+  },
+  {
+    id: 'hc-040',
+    type: 'essay',
+    diff: 'medium',
+    sub: 'CSS 基础',
+    q: 'CSS 选择器优先级如何计算？!important 应该如何看待？',
+    ans: `**面试回答：**CSS 优先级通常按四个层级比较：内联样式、ID 选择器、类/属性/伪类选择器、标签/伪元素选择器。比较时从高到低逐级判断，优先级相同则后声明的规则覆盖前面的规则。
+
+!important 会提升声明优先级，但它会破坏正常层叠关系，让样式难以维护。实际项目中应优先通过合理的选择器、组件作用域、CSS Modules 或 BEM 约定解决覆盖问题，只有在覆盖第三方库样式等少数场景谨慎使用。`,
+    ana: '优先级题不要只背数字，可以按“内联、ID、类属性伪类、标签伪元素”四层解释，再补充后声明覆盖和 !important 的维护成本。',
+    keys: ['选择器优先级', '层叠', '!important', '维护性'],
+    src: '从零开始的前端面试题.md / 面试问答.md',
   },
 ]

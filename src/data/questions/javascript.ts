@@ -886,7 +886,7 @@ scheduler.add(task(300, 'C')).then(console.log)  // 1.5s 后 C（等名额）
 **限制**：Proxy 无法代理基本类型，只能代理对象；对旧浏览器兼容性差，不能被完整 polyfill。`,
     ana: '回答要从“代理整个对象”解释 Vue3 的优势，而不是只说 Proxy 更强。',
     keys: ['get/set 拦截', 'Reflect 默认行为', '新增删除属性', 'Map/Set'],
-    src: 'ES6 高频题 / Vue 响应式原理',
+    src: '收集的面试知识点.md / Vue框架面试题.md',
   },
   {
     id: 'js-042',
@@ -917,6 +917,38 @@ scheduler.add(task(300, 'C')).then(console.log)  // 1.5s 后 C（等名额）
 **使用场景**：自定义集合遍历、惰性序列、异步流程控制。async/await 的早期实现思路就可以看成 Generator + Promise 自动执行器。`,
     ana: '三者关系：Iterator 是协议，for...of 是消费协议的语法，Generator 是创建迭代器的语法糖。',
     keys: ['Symbol.iterator', 'next()', 'yield', 'for...of'],
-    src: 'ES6 高频题',
+    src: '收集的面试知识点.md / 前端面试八股文.md',
+  },
+  {
+    id: 'js-044',
+    type: 'single',
+    diff: 'medium',
+    sub: '闭包与作用域',
+    q: '下面哪句话最准确地描述了闭包？',
+    opts: [
+      '闭包是只能在全局作用域中使用的函数',
+      '闭包是函数能够记住并访问其词法作用域的能力，即使函数在原作用域之外执行',
+      '闭包会让所有变量都自动变成全局变量',
+      '闭包只能由箭头函数创建',
+    ],
+    ans: 'B',
+    ana: '闭包的核心是函数保留对外层词法作用域变量的引用。它常用于数据私有化、函数柯里化、缓存和异步回调，但也可能导致变量长期不被释放，需要注意内存占用。',
+    keys: ['词法作用域', '变量引用', '数据私有化', '内存占用'],
+    src: '从零开始的前端面试题.md / 前端面试八股文.md',
+  },
+  {
+    id: 'js-045',
+    type: 'essay',
+    diff: 'medium',
+    sub: '模块化',
+    q: 'CommonJS 和 ES Module 有什么区别？为什么 Tree Shaking 更依赖 ES Module？',
+    ans: `**面试回答：**CommonJS 主要用于 Node 早期模块系统，通过 require 同步加载、module.exports 导出，模块依赖可以出现在运行时分支中，具有较强动态性。
+
+ES Module 使用 import/export 静态声明依赖，编译阶段就能分析模块之间的导入导出关系；它是异步加载模型，支持静态分析、循环依赖处理和浏览器原生模块。
+
+Tree Shaking 更依赖 ES Module，是因为打包器可以在编译阶段确定哪些 export 没有被使用，再配合压缩工具删除无用代码。CommonJS 的 require 更偏运行时，动态路径和条件加载会让静态分析困难。`,
+    ana: '关键不是“谁更新”，而是静态依赖图：ESM 的 import/export 可被构建工具提前分析，这是 Tree Shaking 生效的基础。',
+    keys: ['CommonJS', 'ES Module', '静态分析', 'Tree Shaking'],
+    src: '前端工程化面试题.md / 收集的面试知识点.md',
   },
 ]

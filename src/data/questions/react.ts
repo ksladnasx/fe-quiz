@@ -616,7 +616,7 @@ function Timer() {
 **不建议无脑使用**：useMemo/useCallback 本身也有依赖比较和缓存维护成本，代码还会更复杂。普通轻量计算、没有传给 memo 子组件的函数，直接写通常更清晰。`,
     ana: '关键是说明“配合 memo 或昂贵计算才有意义”，不是看到函数就包 useCallback。',
     keys: ['缓存计算结果', '缓存函数引用', 'React.memo', '依赖比较成本'],
-    src: 'React Hooks 高频题',
+    src: 'React框架面试题.md / 知识点快速复习指南.md',
   },
   {
     id: 'ra-029',
@@ -633,7 +633,7 @@ function Timer() {
     ans: 'B',
     ana: 'useRef 返回稳定对象 `{ current }`，修改 current 不会触发渲染，但这个对象会在组件生命周期内保持同一引用。它适合保存 DOM 引用、定时器 ID、WebSocket/SSE 实例、最新回调等不直接参与 UI 展示的数据。参与视图展示的数据应使用 state。',
     keys: ['不触发渲染', '稳定引用', '保存实例'],
-    src: 'React Hooks 高频题',
+    src: 'React框架面试题.md / 知识点快速复习指南.md',
   },
   {
     id: 'ra-030',
@@ -650,6 +650,38 @@ function Timer() {
 **实践建议**：一般在路由级或关键业务模块外层包裹 Error Boundary，做到局部模块异常不拖垮整个应用。`,
     ana: 'Error Boundary 只兜 React 渲染链路，不是所有 JS 异常的万能捕获器。',
     keys: ['getDerivedStateFromError', 'componentDidCatch', '渲染错误', '异步错误捕获不到'],
-    src: 'React 稳定性高频题',
+    src: 'React框架面试题.md / 农担项目所遇问题及总结.md',
+  },
+  {
+    id: 'ra-031',
+    type: 'multiple',
+    diff: 'medium',
+    sub: '状态管理',
+    q: 'React 中使用 Context 管理状态时，下面哪些说法是合理的？（多选）',
+    opts: [
+      'Context 适合传递主题、语言、登录用户等跨层级共享数据',
+      'Provider 的 value 每次创建新对象都可能导致消费组件重新渲染',
+      'Context 可以完全替代所有服务端状态缓存方案',
+      '复杂状态可以结合 useReducer 或专门状态库管理',
+    ],
+    ans: ['A', 'B', 'D'],
+    ana: 'Context 解决跨层级传参问题，适合相对稳定的全局数据。Provider value 如果每次渲染都创建新对象，会让消费者重新渲染，必要时可拆分 Context 或 memo value。服务端状态缓存还要考虑请求、缓存、失效和重试，不能只靠 Context。',
+    keys: ['Context', 'Provider value', 'useReducer', '状态管理'],
+    src: 'React框架面试题.md / 知识点快速复习指南.md',
+  },
+  {
+    id: 'ra-032',
+    type: 'essay',
+    diff: 'hard',
+    sub: '性能优化',
+    q: 'React 组件频繁无效渲染时，你会如何定位和优化？',
+    ans: `**面试回答：**我会先用 React DevTools Profiler 定位哪些组件渲染频繁、每次渲染耗时多少、渲染原因是什么，而不是直接到处加 memo。
+
+常见优化手段包括：稳定 key，避免父组件每次传入新的对象或函数；对子组件使用 React.memo，配合 useMemo/useCallback 稳定引用；把大组件拆成更小的组件，减少状态变化影响范围；把不参与 UI 的数据放到 useRef；列表过大时使用分页或虚拟列表。
+
+需要注意，memo、useMemo 和 useCallback 都有成本，只有在组件较重、渲染频繁或依赖浅比较时才值得使用。`,
+    ana: 'React 性能题要先定位，再针对 props 引用、状态范围、列表规模和组件开销分别处理。',
+    keys: ['Profiler', 'React.memo', 'useMemo', 'useCallback', '虚拟列表'],
+    src: 'React框架面试题.md / 前端性能优化.md',
   },
 ]

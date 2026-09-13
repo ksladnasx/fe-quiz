@@ -488,7 +488,7 @@ https://example.com:443/api/v1/users?id=1#top
 **项目策略**：index.html 通常 no-cache 或短缓存，保证能及时拿到最新资源入口；带内容 hash 的 JS/CSS/图片设置较长 max-age + immutable。`,
     ana: 'no-cache 和 no-store 是高频混淆点：前者要协商，后者完全不存。',
     keys: ['max-age', 'no-cache 协商', 'no-store 不存储', 'immutable'],
-    src: 'HTTP 缓存高频题',
+    src: '计算机网络面试题.md / 浏览器原理知识点.md',
   },
   {
     id: 'net-023',
@@ -505,7 +505,7 @@ https://example.com:443/api/v1/users?id=1#top
     ans: 'B',
     ana: 'HTTPS 握手中服务端会返回证书，证书由受信任 CA 签发，包含域名、服务器公钥、有效期等信息。浏览器验证证书链、域名、有效期和吊销状态，确认公钥确实属于目标服务器，防止中间人把自己的公钥冒充成服务器公钥。',
     keys: ['CA', '证书链', '服务器身份', '防中间人'],
-    src: 'HTTPS 高频题',
+    src: '计算机网络面试题.md / 知识点快速复习指南.md',
   },
   {
     id: 'net-024',
@@ -525,6 +525,36 @@ https://example.com:443/api/v1/users?id=1#top
 5. 页面卸载时清理定时器和连接。`,
     ana: '心跳解决半开连接检测，重连要处理退避、主动关闭、消息补偿和幂等。',
     keys: ['心跳 ping/pong', '半开连接', '指数退避', '消息补偿'],
-    src: 'WebSocket 稳定性高频题',
+    src: '计算机网络面试题.md / 一些高频率考点.md',
+  },
+  {
+    id: 'net-025',
+    type: 'single',
+    diff: 'medium',
+    sub: 'HTTP 协议',
+    q: 'HTTP 请求方法中，通常被认为是幂等的是哪一组？',
+    opts: [
+      'GET、PUT、DELETE 通常具有幂等语义',
+      'POST 一定幂等，GET 一定不幂等',
+      '所有带请求体的方法都不幂等',
+      'PATCH 在任何场景都一定幂等',
+    ],
+    ans: 'A',
+    ana: 'GET 获取资源，PUT 整体替换指定资源，DELETE 删除指定资源，重复执行同一请求通常结果一致，因此具有幂等语义。POST 通常用于创建资源，不幂等；PATCH 是否幂等取决于具体补丁语义和接口设计。',
+    keys: ['幂等', 'GET', 'PUT', 'DELETE', 'POST'],
+    src: '计算机网络面试题.md / fastapi知识点.md',
+  },
+  {
+    id: 'net-026',
+    type: 'essay',
+    diff: 'medium',
+    sub: 'DNS',
+    q: 'DNS 解析过程大致是怎样的？前端性能优化中为什么会提到 DNS 预解析？',
+    ans: `**面试回答：**浏览器访问域名前，需要先把域名解析成 IP。通常会按浏览器缓存、系统缓存、hosts、本地 DNS、根域名服务器、顶级域名服务器、权威域名服务器的顺序逐层查询，最终拿到目标 IP。
+
+DNS 解析会带来额外网络耗时，尤其是页面依赖多个第三方域名时。前端可以使用 dns-prefetch 提前解析即将访问的域名，或者用 preconnect 提前完成 DNS、TCP 和 TLS 握手，降低关键资源请求前的等待时间。`,
+    ana: 'DNS 题可以和“输入 URL 到页面展示”串起来，也可以和资源加载优化中的 dns-prefetch、preconnect 串起来。',
+    keys: ['DNS 解析', '缓存', '权威 DNS', 'dns-prefetch', 'preconnect'],
+    src: '计算机网络面试题.md / 前端性能优化面试题.md',
   },
 ]
